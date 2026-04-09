@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://C:/Estudos/Curso Spring Boot framework Swagger Docker Kubernetes K8s API RESTful JWT JUnit 5 Mockito React JS do 0 à AWS e GCP e+/rest-with-spring-boot-and-java-erudio/08_FirstStepInJavawithSpringBoot" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

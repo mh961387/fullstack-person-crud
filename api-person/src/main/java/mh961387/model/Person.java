@@ -1,0 +1,52 @@
+package mh961387.model;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "person")
+@Getter
+@Setter
+public class Person implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "first_name", nullable = false, length = 80)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false, length = 80)
+    private String lastName;
+
+    @Column(nullable = false, length = 100)
+    private String address;
+
+    @Column(name = "zip_code")
+    private Long zipCode;
+
+    @Column(length = 50)
+    private String city;
+
+    @Column(length = 50)
+    private String state;
+
+    @Column(nullable = false, length = 6)
+    private String gender;
+
+    @Column(nullable = false, name = "date_birth")
+    private LocalDate dateBirth;
+
+    @Column(length = 15, nullable = false, unique = true)
+    private Long document;
+
+    @Column(length = 11)
+    private String fone;
+
+}
