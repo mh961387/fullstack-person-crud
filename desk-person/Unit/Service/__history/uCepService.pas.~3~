@@ -1,0 +1,64 @@
+unit uCepService;
+
+interface
+
+uses
+  System.SysUtils, System.JSON, System.Net.HttpClient, System.Net.HttpClientComponent;
+
+type
+  TCepDTO = class
+  public
+    Cep: string;
+    Logradouro: string;
+    Bairro: string;
+    Cidade: string;
+    Estado: string;
+  end;
+
+  TCepService = class
+  public
+    function BuscarCep(ACep: string): TCepDTO;
+  end;
+
+implementation
+
+function TCepService.BuscarCep(ACep: string): TCepDTO;
+var
+  Client: TNetHTTPClient;
+  Response: IHTTPResponse;
+  JSON: TJSONObject;
+begin
+  Result := nil;
+
+  Client := TNetHTTPClient.Create(nil);
+  try
+    Response := Client.Get(
+      Format('https://viacep.com.br/ws/%s/json/', [ACep])
+    );
+
+    if Response.StatusCode <> 200 then
+      raise Exception.Create('Erro ao consultar CEP');
+
+    JSON := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
+
+    try
+      if JSON.GetValue('erro') <> nil then
+        raise Exception.Create('CEP não encontrado');
+
+      Result := TCepDTO.Create;
+      Result.Cep := JSON.GetValue('cep').Value;
+      Result.Logradouro := JSON.GetValue('logradouro').Value;
+      Result.Bairro := JSON.GetValue('bairro').Value;
+      Result.Cidade := JSON.GetValue('localidade').Value;
+      Result.Estado := JSON.GetValue('uf').Value;
+
+    finally
+      JSON.Free;
+    end;
+
+  finally
+    Client.Free;
+  end;
+end;
+
+end.

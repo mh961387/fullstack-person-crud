@@ -1,0 +1,16 @@
+program desktopperson;
+
+uses
+  Vcl.Forms,
+  uFormPrincipal in '..\..\..\Form\uFormPrincipal.pas' {Form1},
+  uPerson in '..\Person\uPerson.pas',
+  uRTTIMapper in '..\RTTI\uRTTIMapper.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TForm1, Form1);
+  Application.Run;
+end.

@@ -1,0 +1,188 @@
+unit Person.Service;
+
+interface
+
+uses
+  System.SysUtils, System.JSON, System.Net.HttpClient,
+  System.Classes, uPerson, System.Net.URLClient,
+  System.NetEncoding, System.NetConsts, System.Net.HttpClientComponent;
+
+type
+  TPersonService = class
+  public
+    function CreatePerson(APerson: TPerson): string;
+    function GetAll: TJSONArray;
+    function JSONToPerson(AJSON: TJSONObject): TPerson;
+    function GetById(AId:Integer): TPerson;
+    function PersonToJSON(APerson: TPerson; AComId: Boolean = False): TJSONObject;
+    function ISOToDate(const AValue: string): TDate;
+    function Update(APerson: TPerson): Boolean;
+  end;
+
+implementation
+
+function TPersonService.ISOToDate(const AValue: string): TDate;
+var
+  Y, M, D: Word;
+begin
+  Y := StrToInt(Copy(AValue, 1, 4));
+  M := StrToInt(Copy(AValue, 6, 2));
+  D := StrToInt(Copy(AValue, 9, 2));
+
+  Result := EncodeDate(Y, M, D);
+end;
+
+function TPersonService.PersonToJSON(APerson: TPerson; AComId: Boolean): TJSONObject;
+begin
+  Result := TJSONObject.Create;
+  Result.AddPair('id', TJSONNumber.Create(APerson.Id));
+  Result.AddPair('firstName', APerson.FirstName);
+  Result.AddPair('lastName', APerson.LastName);
+  Result.AddPair('address', APerson.Address);
+  Result.AddPair('zipCode', TJSONNumber.Create(APerson.ZipCode));
+  Result.AddPair('city', APerson.City);
+  Result.AddPair('state', APerson.State);
+  Result.AddPair('gender', APerson.Gender);
+  Result.AddPair('dateBirth', FormatDateTime('yyyy-mm-dd', APerson.DateBirth));
+  Result.AddPair('document', TJSONNumber.Create(APerson.Document));
+  Result.AddPair('fone', TJSONNumber.Create(APerson.Fone));
+end;
+
+function TPersonService.JSONToPerson(AJSON: TJSONObject): TPerson;
+begin
+  Result := TPerson.Create;
+
+  Result.Id := StrToIntDef(AJSON.GetValue('id').Value, 0);
+  Result.FirstName := AJSON.GetValue('firstName').Value;
+  Result.LastName := AJSON.GetValue('lastName').Value;
+  Result.Address := AJSON.GetValue('address').Value;
+  Result.ZipCode := StrToInt64Def(AJSON.GetValue('zipCode').Value, 0);
+  Result.City := AJSON.GetValue('city').Value;
+  Result.State := AJSON.GetValue('state').Value;
+  Result.Gender := AJSON.GetValue('gender').Value;
+
+  Result.DateBirth := ISOToDate(AJSON.GetValue('dateBirth').Value);
+
+  Result.Document := StrToInt64Def(AJSON.GetValue('document').Value, 0);
+  Result.Fone := AJSON.GetValue('fone').Value;
+end;
+
+function TPersonService.CreatePerson(APerson: TPerson): string;
+var
+  Client: TNetHTTPClient;
+  Response: IHTTPResponse;
+  JSON: TJSONObject;
+  Body: TStringStream;
+begin
+  Client := TNetHTTPClient.Create(nil);
+  JSON := PersonToJSON(APerson);
+
+  try
+    Body := TStringStream.Create(JSON.ToString, TEncoding.UTF8);
+    try
+      Response := Client.Post(
+        'http://localhost:8080/person',
+        Body,
+        nil,
+        [TNameValuePair.Create('Content-Type', 'application/json')]
+      );
+
+      Result := Response.ContentAsString;
+
+    finally
+      Body.Free;
+    end;
+
+  finally
+    JSON.Free;
+    Client.Free;
+  end;
+end;
+
+function TPersonService.GetAll: TJSONArray;
+var
+  Client: TNetHTTPClient;
+  Response: IHTTPResponse;
+begin
+  Client := TNetHTTPClient.Create(nil);
+  try
+    Response := Client.Get('http://localhost:8080/person');
+
+    Result := TJSONObject.ParseJSONValue(
+      Response.ContentAsString
+    ) as TJSONArray;
+
+  finally
+    Client.Free;
+  end;
+end;
+
+function TPersonService.GetById(AId: Integer): TPerson;
+var
+  Client: TNetHTTPClient;
+  Response: IHTTPResponse;
+  JSON: TJSONObject;
+begin
+  Client := TNetHTTPClient.Create(nil);
+  try
+    Response := Client.Get(
+      Format('http://localhost:8080/person/%d', [AId])
+    );
+
+    if Response.StatusCode <> 200 then
+      raise Exception.Create('Erro ao buscar registro: ' + Response.ContentAsString);
+
+    if Response.StatusCode = 404 then
+      raise Exception.Create('Registro não encontrado');
+
+    JSON := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
+
+    try
+      Result := JSONToPerson(JSON);
+    finally
+      JSON.Free;
+    end;
+
+  finally
+    Client.Free;
+  end;
+end;
+
+function TPersonService.Update(APerson: TPerson): Boolean;
+var
+  Client: TNetHTTPClient;
+  Response: IHTTPResponse;
+  JSON: TJSONObject;
+  Body: TStringStream;
+begin
+  Client := TNetHTTPClient.Create(nil);
+  JSON := PersonToJSON(APerson);
+
+  try
+    Body := TStringStream.Create(JSON.ToString, TEncoding.UTF8);
+    try
+      Response := Client.Put(
+        'http://localhost:8080/person',
+        Body,
+        nil,
+        [TNameValuePair.Create('Content-Type', 'application/json')]
+      );
+
+      if Response.StatusCode in [200, 204] then
+        Result := True
+      else
+        raise Exception.Create(
+          'Erro ao atualizar: ' + Response.ContentAsString
+        );
+
+    finally
+      Body.Free;
+    end;
+
+  finally
+    JSON.Free;
+    Client.Free;
+  end;
+end;
+
+end.

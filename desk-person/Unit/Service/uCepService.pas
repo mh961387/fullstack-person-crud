@@ -1,0 +1,88 @@
+unit uCepService;
+
+interface
+
+uses
+  System.SysUtils, System.JSON, System.Net.HttpClient, System.Net.HttpClientComponent;
+
+type
+  TCepDTO = class
+  private
+    FAddress: string;
+    FCity: string;
+    FState: string;
+
+    procedure SetAddress(const Value: string);
+    procedure SetCity(const Value: string);
+    procedure SetState(const Value: string);
+
+  public
+    property Address: string read FAddress write SetAddress;
+    property City: string read FCity write SetCity;
+    property State: string read FState write SetState;
+  end;
+
+  TCepService = class
+  public
+    function BuscarCep(ACep: string): TCepDTO;
+  end;
+
+implementation
+
+{ TCepDTO }
+
+procedure TCepDTO.SetAddress(const Value: string);
+begin
+  FAddress := Value;
+end;
+
+procedure TCepDTO.SetCity(const Value: string);
+begin
+  FCity := Value;
+end;
+
+procedure TCepDTO.SetState(const Value: string);
+begin
+  FState := Value;
+end;
+
+{ TCepService }
+
+function TCepService.BuscarCep(ACep: string): TCepDTO;
+var
+  Client: TNetHTTPClient;
+  Response: IHTTPResponse;
+  JSON: TJSONObject;
+begin
+  Result := nil;
+
+  Client := TNetHTTPClient.Create(nil);
+  try
+    Response := Client.Get(
+      Format('https://viacep.com.br/ws/%s/json/', [ACep])
+    );
+
+    if Response.StatusCode <> 200 then
+      raise Exception.Create('Erro ao consultar CEP');
+
+    JSON := TJSONObject.ParseJSONValue(Response.ContentAsString) as TJSONObject;
+
+    try
+      if JSON.GetValue('erro') <> nil then
+        raise Exception.Create('CEP não encontrado');
+
+      Result := TCepDTO.Create;
+      Result.Address := JSON.GetValue('logradouro').Value + ' ' + JSON.GetValue('bairro').Value;
+      Result.City := JSON.GetValue('localidade').Value;
+      Result.State := JSON.GetValue('uf').Value;
+
+    finally
+      JSON.Free;
+    end;
+
+  finally
+    Client.Free;
+  end;
+end;
+
+end.

@@ -1,0 +1,457 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  BorderStyle = bsNone
+  Caption = 'Form1'
+  ClientHeight = 480
+  ClientWidth = 844
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object pnlCabecalho: TPanel
+    Left = 0
+    Top = 0
+    Width = 844
+    Height = 57
+    Align = alTop
+    Alignment = taLeftJustify
+    Caption = '  Person registration'
+    Color = clHighlight
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -21
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 2
+    object s: TSpeedButton
+      AlignWithMargins = True
+      Left = 788
+      Top = 11
+      Width = 45
+      Height = 35
+      Margins.Left = 10
+      Margins.Top = 10
+      Margins.Right = 10
+      Margins.Bottom = 10
+      Align = alRight
+      Caption = 'X'
+      Flat = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clRed
+      Font.Height = -29
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = sClick
+      ExplicitLeft = 787
+      ExplicitTop = 6
+      ExplicitHeight = 45
+    end
+  end
+  object pnlCadastro: TPanel
+    Left = 0
+    Top = 57
+    Width = 844
+    Height = 224
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 16
+      Top = 38
+      Width = 76
+      Height = 18
+      Caption = 'First Name:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 464
+      Top = 38
+      Width = 76
+      Height = 18
+      Caption = 'Last Name:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label3: TLabel
+      Left = 464
+      Top = 152
+      Width = 57
+      Height = 18
+      Caption = 'Address:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label4: TLabel
+      Left = 16
+      Top = 152
+      Width = 61
+      Height = 18
+      Caption = 'Zip Code:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label5: TLabel
+      Left = 16
+      Top = 76
+      Width = 70
+      Height = 18
+      Caption = 'Date Birth:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label6: TLabel
+      Left = 464
+      Top = 76
+      Width = 52
+      Height = 18
+      Caption = 'Gender:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label7: TLabel
+      Left = 16
+      Top = 113
+      Width = 37
+      Height = 18
+      Caption = 'Fone:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label8: TLabel
+      Left = 464
+      Top = 113
+      Width = 72
+      Height = 18
+      Caption = 'Document:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label9: TLabel
+      Left = 16
+      Top = 192
+      Width = 29
+      Height = 18
+      Caption = 'City:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label10: TLabel
+      Left = 464
+      Top = 192
+      Width = 39
+      Height = 18
+      Caption = 'State:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object edtFirstName: TEdit
+      Left = 98
+      Top = 37
+      Width = 287
+      Height = 24
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      MaxLength = 80
+      ParentFont = False
+      TabOrder = 0
+    end
+    object edtLastName: TEdit
+      Left = 546
+      Top = 37
+      Width = 287
+      Height = 24
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      MaxLength = 80
+      ParentFont = False
+      TabOrder = 1
+    end
+    object edtAddress: TEdit
+      Left = 546
+      Top = 151
+      Width = 287
+      Height = 24
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      MaxLength = 100
+      ParentFont = False
+      TabOrder = 7
+    end
+    object edtZipCode: TMaskEdit
+      Left = 98
+      Top = 151
+      Width = 124
+      Height = 24
+      EditMask = '0000-0000;0;_'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      MaxLength = 9
+      ParentFont = False
+      TabOrder = 6
+      Text = ''
+      OnExit = edtZipCodeExit
+    end
+    object dtDateBirth: TDateTimePicker
+      Left = 98
+      Top = 74
+      Width = 186
+      Height = 24
+      Date = 46116.649009884260000000
+      Time = 46116.649009884260000000
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+    end
+    object cbGender: TComboBox
+      Left = 546
+      Top = 76
+      Width = 145
+      Height = 22
+      Style = csOwnerDrawFixed
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ItemIndex = 0
+      ParentFont = False
+      TabOrder = 3
+      Text = 'Female'
+      Items.Strings = (
+        'Female'
+        'Male')
+    end
+    object edtFone: TMaskEdit
+      Left = 98
+      Top = 112
+      Width = 122
+      Height = 24
+      EditMask = '!\(00\)00000-0000;0;_'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      MaxLength = 14
+      ParentFont = False
+      TabOrder = 4
+      Text = ''
+    end
+    object edtDocument: TEdit
+      Left = 546
+      Top = 112
+      Width = 145
+      Height = 24
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      MaxLength = 15
+      ParentFont = False
+      TabOrder = 5
+    end
+    object edtCity: TEdit
+      Left = 98
+      Top = 191
+      Width = 126
+      Height = 24
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      MaxLength = 50
+      ParentFont = False
+      TabOrder = 8
+    end
+    object edtState: TEdit
+      Left = 546
+      Top = 191
+      Width = 145
+      Height = 24
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      MaxLength = 50
+      ParentFont = False
+      TabOrder = 9
+    end
+    object edtId: TEdit
+      Left = 16
+      Top = 6
+      Width = 61
+      Height = 21
+      Enabled = False
+      TabOrder = 10
+      Text = '0'
+    end
+  end
+  object pnlBotoes: TPanel
+    Left = 0
+    Top = 281
+    Width = 844
+    Height = 48
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 1
+    object btnSalvar: TButton
+      Left = 459
+      Top = 6
+      Width = 91
+      Height = 35
+      Caption = 'SAVE'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      OnClick = btnSalvarClick
+    end
+    object btnList: TButton
+      Left = 750
+      Top = 7
+      Width = 91
+      Height = 35
+      Caption = 'LIST'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 1
+      OnClick = btnListClick
+    end
+    object btnExcluir: TButton
+      Left = 556
+      Top = 6
+      Width = 91
+      Height = 35
+      Caption = 'DELETE'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
+      OnClick = btnExcluirClick
+    end
+    object btnCancel: TButton
+      Left = 653
+      Top = 6
+      Width = 91
+      Height = 35
+      Caption = 'CANCEL'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 3
+      OnClick = btnCancelClick
+    end
+  end
+  object gridPerson: TStringGrid
+    Left = 0
+    Top = 329
+    Width = 844
+    Height = 151
+    Align = alClient
+    ColCount = 11
+    TabOrder = 3
+    OnSelectCell = gridPersonSelectCell
+    ColWidths = (
+      64
+      64
+      64
+      64
+      64
+      64
+      64
+      64
+      64
+      64
+      64)
+    RowHeights = (
+      24
+      24
+      24
+      24
+      24)
+  end
+end

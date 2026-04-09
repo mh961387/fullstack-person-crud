@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2026/04/04 16:39:56.000.331,=C:\Estudos\Projetos Particulares\desk-person\Unit1.pas</Transaction>
+    <Transaction>2026/04/04 16:40:09.000.560,C:\Estudos\Projetos Particulares\desk-person\Unit\Service\Person.Service.pas=C:\Estudos\Projetos Particulares\desk-person\Unit1.pas</Transaction>
+    <Transaction>2026/04/07 16:09:27.000.762,=C:\Estudos\Projetos Particulares\desk-person\Unit1.pas</Transaction>
+    <Transaction>2026/04/07 16:09:35.000.973,C:\Estudos\Projetos Particulares\desk-person\Unit1.pas=C:\Estudos\Projetos Particulares\desk-person\Unit\Service\uCepService.pas</Transaction>
+  </Transactions>
+</BorlandProject>

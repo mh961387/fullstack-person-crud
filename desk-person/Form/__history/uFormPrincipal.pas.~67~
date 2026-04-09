@@ -1,0 +1,281 @@
+﻿unit uFormPrincipal;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Mask,
+  Vcl.ExtCtrls, Vcl.Buttons, uPerson, uRTTIMapper, Person.Service, Vcl.Grids, System.JSON, uCepService;
+
+type
+  TForm1 = class(TForm)
+    pnlCabecalho: TPanel;
+    pnlCadastro: TPanel;
+    Label1: TLabel;
+    edtFirstName: TEdit;
+    Label2: TLabel;
+    edtLastName: TEdit;
+    Label3: TLabel;
+    edtAddress: TEdit;
+    Label4: TLabel;
+    edtZipCode: TMaskEdit;
+    dtDateBirth: TDateTimePicker;
+    Label5: TLabel;
+    cbGender: TComboBox;
+    Label6: TLabel;
+    Label7: TLabel;
+    edtFone: TMaskEdit;
+    Label8: TLabel;
+    edtDocument: TEdit;
+    Label9: TLabel;
+    edtCity: TEdit;
+    edtState: TEdit;
+    Label10: TLabel;
+    pnlBotoes: TPanel;
+    btnSalvar: TButton;
+    gridPerson: TStringGrid;
+    btnList: TButton;
+    s: TSpeedButton;
+    edtId: TEdit;
+    btnExcluir: TButton;
+    btnCancel: TButton;
+    Button1: TButton;
+    procedure btnSalvarClick(Sender: TObject);
+    procedure btnListClick(Sender: TObject);
+    procedure sClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure gridPersonSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+    procedure btnExcluirClick(Sender: TObject);
+    procedure btnCancelClick(Sender: TObject);
+    procedure edtZipCodeExit(Sender: TObject);
+  private
+    { Private declarations }
+    procedure configurarGrid;
+    procedure CarregarPessoas;
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.btnCancelClick(Sender: TObject);
+begin
+  LimparForm(Self);
+end;
+
+procedure TForm1.btnExcluirClick(Sender: TObject);
+var
+  Service: TPersonService;
+  Id: Integer;
+begin
+  Id := StrToIntDef(gridPerson.Cells[0, gridPerson.Row], 0);
+
+  if Id = 0 then
+  begin
+    ShowMessage('Selecione um registro para excluir.');
+    Exit;
+  end;
+
+  if MessageDlg('Deseja realmente excluir este registro?',
+    mtConfirmation, [mbYes, mbNo], 0) = mrNo then
+    Exit;
+
+  Service := TPersonService.Create;
+  try
+    Service.Delete(Id);
+
+    ShowMessage('Registro excluído com sucesso!');
+
+    CarregarPessoas;
+    LimparForm(Self);
+  finally
+    Service.Free;
+  end;
+end;
+
+procedure TForm1.btnListClick(Sender: TObject);
+begin
+  ConfigurarGrid;
+  CarregarPessoas;
+end;
+
+procedure TForm1.btnSalvarClick(Sender: TObject);
+var
+  Person: TPerson;
+  Service: TPersonService;
+begin
+  Person := TPerson.Create;
+  Service := TPersonService.Create;
+
+  try
+    MapFormToObject(Self, Person);
+
+    if Person.Id > 0 then
+    begin
+      Service.Update(Person);
+      ShowMessage('Registro atualizado com sucesso!');
+    end
+    else
+    begin
+      Service.CreatePerson(Person);
+      ShowMessage('Registro criado com sucesso!');
+    end;
+
+  finally
+    Person.Free;
+    Service.Free;
+    LimparForm(Self);
+  end;
+end;
+
+procedure TForm1.ConfigurarGrid;
+begin
+  gridPerson.Cells[0,0] := 'ID';
+  gridPerson.Cells[1,0] := 'First Name';
+  gridPerson.Cells[2,0] := 'Last Name';
+  gridPerson.Cells[3,0] := 'Gender';
+  gridPerson.Cells[4,0] := 'Fone';
+  gridPerson.Cells[5,0] := 'Document';
+  gridPerson.Cells[6,0] := 'City';
+  gridPerson.Cells[7,0] := 'Address;';
+  gridPerson.Cells[8,0] := 'Zip Code';
+  gridPerson.Cells[9,0] := 'State';
+  gridPerson.Cells[10,0] := 'Date Birth';
+
+  gridPerson.ColWidths[0] := 50;
+  gridPerson.ColWidths[1] := 150;
+  gridPerson.ColWidths[2] := 150;
+  gridPerson.ColWidths[3] := 120;
+  gridPerson.ColWidths[4] := 120;
+  gridPerson.ColWidths[5] := 120;
+  gridPerson.ColWidths[6] := 120;
+  gridPerson.ColWidths[7] := 120;
+  gridPerson.ColWidths[8] := 80;
+  gridPerson.ColWidths[9] := 120;
+  gridPerson.ColWidths[10] := 100;
+end;
+
+procedure TForm1.edtZipCodeExit(Sender: TObject);
+var
+  Service: TCepService;
+  Cep: TCepDTO;
+begin
+  if edtZipCode.Text = '' then Exit;
+
+  Service := TCepService.Create;
+  try
+    Cep := Service.BuscarCep(edtZipCode.Text);
+    try
+      edtAddress.Text := Cep.Logradouro;
+      edtCity.Text := Cep.Cidade;
+      edtState.Text := Cep.Estado;
+    finally
+      Cep.Free;
+    end;
+  finally
+    Service.Free;
+  end;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  configurarGrid;
+end;
+
+procedure TForm1.gridPersonSelectCell(Sender: TObject; ACol, ARow: Integer;
+  var CanSelect: Boolean);
+var
+  Service: TPersonService;
+  Person: TPerson;
+  Id: Integer;
+begin
+  if ARow = 0 then Exit;
+
+  Id := StrToIntDef(gridPerson.Cells[0, ARow], 0);
+
+  try
+    Service := TPersonService.Create;
+
+    Person := Service.GetById(Id);
+    MapObjectToForm(Person, Self);
+
+  finally
+    Service.Free;
+    Person.Free;
+  end;
+end;
+
+procedure TForm1.sClick(Sender: TObject);
+begin
+  Application.Terminate;
+end;
+
+procedure TForm1.CarregarPessoas;
+var
+  Service: TPersonService;
+  JSONArray: TJSONArray;
+  I: Integer;
+  Obj: TJSONObject;
+begin
+  Service := TPersonService.Create;
+  try
+    JSONArray := Service.GetAll;
+
+    if JSONArray = nil then
+    begin
+      ShowMessage('Erro ao carregar dados');
+      Exit;
+    end;
+
+    gridPerson.RowCount := JSONArray.Count + 1;
+
+    for I := 0 to JSONArray.Count - 1 do
+    begin
+      Obj := JSONArray.Items[I] as TJSONObject;
+
+      gridPerson.Cells[0, I+1] :=
+        Obj.GetValue<Integer>('id').ToString;
+
+      gridPerson.Cells[1, I+1] :=
+        Obj.GetValue<string>('firstName');
+
+      gridPerson.Cells[2, I+1] :=
+        Obj.GetValue<string>('lastName');
+
+      gridPerson.Cells[3, I+1] :=
+        Obj.GetValue<string>('gender');
+
+      gridPerson.Cells[4, I+1] :=
+        Obj.GetValue<Int64>('fone').ToString;
+
+      gridPerson.Cells[5, I+1] :=
+        Obj.GetValue<Int64>('document').ToString;
+
+      gridPerson.Cells[6, I+1] :=
+        Obj.GetValue<string>('city');
+
+      gridPerson.Cells[7, I+1] :=
+        Obj.GetValue<string>('address');
+
+      gridPerson.Cells[8, I+1] :=
+        Obj.GetValue<Int64>('zipCode').ToString;
+
+      gridPerson.Cells[9, I+1] :=
+        Obj.GetValue<string>('state');
+
+      gridPerson.Cells[10, I+1] :=
+        Obj.GetValue<string>('dateBirth');
+    end;
+
+  finally
+    Service.Free;
+  end;
+end;
+
+end.

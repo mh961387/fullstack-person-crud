@@ -1,0 +1,22 @@
+unit uPerson;
+
+interface
+
+implementation
+
+type
+  TPerson = class
+  public
+    Id: Int64;
+    FirstName: string;
+    LastName: string;
+    Address: string;
+    ZipCode: Int64;
+    City: string;
+    State: string;
+    Gender: string;
+    DateBirth: TDate;
+    Document: Int64;
+  end;
+
+end.
