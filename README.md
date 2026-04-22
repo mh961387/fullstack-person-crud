@@ -1,4 +1,4 @@
-# 🚀 Person Management System
+# 🚀🧑‍💻 Fullstack Person CRUD
 
 Sistema full stack para gerenciamento de pessoas, desenvolvido com
 **Java (Spring Boot)** no backend e **Delphi (VCL)** no frontend,
@@ -39,7 +39,7 @@ mapeamento de dados.
 
 ### Frontend
 
--   Delphi VCL\
+-   Delphi VCL 10.1\
 -   Consumo de API REST\
 -   RTTI
 
@@ -79,6 +79,26 @@ Abrir projeto Delphi e executar
 -   Uso de RTTI\
 -   Arquitetura em camadas\
 -   Tratamento de exceções
+
+------------------------------------------------------------------------
+## 📖 Documentação da API (Swagger)
+
+A API possui documentação interativa gerada automaticamente com Swagger (OpenAPI).
+
+Após subir o projeto, acesse:
+
+http://localhost:8080/swagger-ui.html
+
+ou (dependendo da versão):
+
+http://localhost:8080/swagger-ui/index.html
+
+### 🔎 O que você pode fazer no Swagger:
+
+Visualizar todos os endpoints disponíveis
+Testar requisições diretamente no navegador
+Ver parâmetros, payloads e respostas
+Validar contratos da API
 
 ------------------------------------------------------------------------
 
